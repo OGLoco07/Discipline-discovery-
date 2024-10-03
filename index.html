@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discipline Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        p {
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .btn:hover {
+            background: #ff4c4c;
+        }
+        .description {
+            margin-top: 20px;
+            max-width: 600px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        .subfield {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .characteristics {
+            font-style: italic;
+            margin-top: 5px;
+        }
+        @media (max-width: 600px) {
+            .btn {
+                width: 100%;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Welcome to Discipline Explorer</h1>
+<p>This tool helps you discover which field suits you best by evaluating your interests.</p>
+<h2>Select a field of interest to begin:</h2>
+
+<div class="button-container">
+    <button class="btn" onclick="showDiscipline('technology')">Technology</button>
+    <button class="btn" onclick="showDiscipline('business')">Business</button>
+    <button class="btn" onclick="showDiscipline('science')">Science</button>
+    <button class="btn" onclick="showDiscipline('health')">Health</button>
+    <button class="btn" onclick="showDiscipline('art')">Art</button>
+</div>
+
+<div class="description" id="content">
+    <h2 id="disciplineTitle"></h2>
+    <div id="disciplineList"></div>
+    <button class="btn" onclick="goBack()">Back to Home</button>
+</div>
+
+<script>
+    const disciplines = {
+        health: {
+            title: "Health",
+            fields: [
+                { 
+                    name: "Medicine", 
+                    description: "Focuses on diagnosing and treating illnesses.", 
+                    howToGetThere: "Complete a medical degree, followed by residency training.",
+                    characteristics: "Ideal for detail-oriented individuals who are compassionate and good at problem-solving."
+                },
+                { 
+                    name: "Nursing", 
+                    description: "Involves caring for patients and supporting their health.", 
+                    howToGetThere: "Obtain a nursing degree (ADN or BSN) and pass the NCLEX exam.",
+                    characteristics: "Best suited for empathetic individuals with strong communication skills."
+                },
+                { 
+                    name: "Public Health", 
+                    description: "Concerned with protecting and improving community health.", 
+                    howToGetThere: "Pursue a degree in public health or a related field.",
+                    characteristics: "Great for those who are passionate about community service and enjoy working with diverse populations."
+                }
+            ]
+        },
+        science: {
+            title: "Science",
+            fields: [
+                { 
+                    name: "Biology", 
+                    description: "The study of living organisms and their interactions.", 
+                    howToGetThere: "Complete a bachelor's degree in biology, followed by graduate studies if desired.",
+                    characteristics: "Ideal for curious minds who enjoy hands-on experiments and data analysis."
+                },
+                { 
+                    name: "Chemistry", 
+                    description: "Focuses on substances and their properties and reactions.", 
+                    howToGetThere: "Earn a degree in chemistry and conduct laboratory work.",
+                    characteristics: "Best for analytical thinkers who enjoy solving complex problems."
+                },
+                { 
+                    name: "Physics", 
+                    description: "The study of matter, energy, and the forces of nature.", 
+                    howToGetThere: "Complete a physics degree and engage in research.",
+                    characteristics: "Suited for logical thinkers who love mathematics and theoretical concepts."
+                }
+            ]
+        },
+        business: {
+            title: "Business",
+            fields: [
+                { 
+                    name: "Marketing", 
+                    description: "The action of promoting and selling products or services.", 
+                    howToGetThere: "Obtain a degree in marketing or business administration.",
+                    characteristics: "Ideal for creative individuals who are good at communication and strategy."
+                },
+                { 
+                    name: "Finance", 
+                    description: "Involves managing money and investments.", 
+                    howToGetThere: "Complete a finance degree and consider certifications like CFA.",
+                    characteristics: "Best for detail-oriented individuals who thrive in quantitative environments."
+                },
+                { 
+                    name: "Management", 
+                    description: "Focuses on coordinating and overseeing operations.", 
+                    howToGetThere: "Earn a degree in business and gain experience in leadership roles.",
+                    characteristics: "Great for organized individuals with strong interpersonal skills."
+                }
+            ]
+        },
+        technology: {
+            title: "Technology",
+            fields: [
+                { 
+                    name: "Software Development", 
+                    description: "The process of designing and building software applications.", 
+                    howToGetThere: "Learn programming languages and gain experience through projects.",
+                    characteristics: "Ideal for problem solvers who enjoy logical thinking and creativity."
+                },
+                { 
+                    name: "Cybersecurity", 
+                    description: "Protecting systems and networks from digital attacks.", 
+                    howToGetThere: "Obtain a degree in IT or cybersecurity and pursue certifications.",
+                    characteristics: "Best for analytical thinkers with a keen interest in technology and security."
+                },
+                { 
+                    name: "Data Science", 
+                    description: "The field of study that uses scientific methods to analyze data.", 
+                    howToGetThere: "Complete a degree in data science or statistics and learn programming.",
+                    characteristics: "Suited for individuals who enjoy working with data and have strong analytical skills."
+                },
+                { 
+                    name: "Information Systems", 
+                    description: "Focuses on managing and analyzing data systems and processes.", 
+                    howToGetThere: "Earn a degree in information systems or a related field.",
+                    characteristics: "Ideal for individuals who are organized and enjoy problem-solving in a tech environment."
+                }
+            ]
+        },
+        art: {
+            title: "Art",
+            fields: [
+                { 
+                    name: "Visual Arts", 
+                    description: "Includes painting, sculpture, and photography.", 
+                    howToGetThere: "Pursue a degree in fine arts and build a portfolio.",
+                    characteristics: "Best for creative individuals who express themselves through visual mediums."
+                },
+                { 
+                    name: "Music", 
+                    description: "The art of arranging sound to create harmony and expression.", 
+                    howToGetThere: "Study music theory and performance, and practice regularly.",
+                    characteristics: "Suited for those with a passion for rhythm, melody, and composition."
+                },
+                { 
+                    name: "Theater", 
+                    description: "Performance art that involves acting out stories.", 
+                    howToGetThere: "Enroll in drama classes and participate in theater productions.",
+                    characteristics: "Ideal for expressive individuals who enjoy storytelling and collaboration."
+                }
+            ]
+        }
+    };
+
+    function showDiscipline(discipline) {
+        const contentDiv = document.getElementById('content');
+        const titleElement = document.getElementById('disciplineTitle');
+        const listElement = document.getElementById('disciplineList');
+
+        titleElement.textContent = disciplines[discipline].title;
+        listElement.innerHTML = disciplines[discipline].fields.map(field => `
+            <div class="subfield">
+                <strong>${field.name}</strong>: ${field.description}<br>
+                <em>How to Get There:</em> ${field.howToGetThere}<br>
+                <span class="characteristics"><em>Characteristics:</em> ${field.characteristics}</span>
+            </div>
+        `).join('');
+
+        contentDiv.style.display = 'block';
+    }
+
+    function goBack() {
+        const contentDiv = document.getElementById('content');
+        contentDiv.style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
